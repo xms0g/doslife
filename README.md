@@ -1,6 +1,6 @@
 # doslife: Conway's Game of Life in 16-bit Real Mode 
 Conway's Game of Life is a zero-player game that simulates cellular automaton behavior, meaning that its evolution is determined by its initial state, requiring no further input from the player. This implementation displays the game in real-time on a DOS terminal using VGA mode 13h graphics. Each character on the screen represents a cell, either alive or dead, that evolves based on its neighbors.
-For the EXE file, download it from [itch.io](https://ms0g.itch.io/doslife).
+You can download the `EXE` file from [itch.io](https://ms0g.itch.io/doslife).
 
 <img src="ASSETS/doslife.gif" alt="image" width="700" height="auto">
 
@@ -9,9 +9,10 @@ For the EXE file, download it from [itch.io](https://ms0g.itch.io/doslife).
 + A dead cell that has 3 live neighbors becomes a live cell.
 
 ## Prerequisites
-+ Turbo C++ (>= 3.0)
-+ Turbo Assembler (>= 3.2)
-+ DOSBox or a real DOS computer
+- **Turbo C++** (`TCC.EXE`) version 3.0 or later  
+- **Turbo Assembler** (`TASM.EXE`) version 4.1 or later  
+- **Turbo Linker** (`TLINK.EXE`) version 5.0 or later  
+- **DOSBox** emulator or a real MS-DOS-compatible computer
 
 ## Building
 ```bash
