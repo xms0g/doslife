@@ -1,7 +1,7 @@
-#include "RENDERER.H"
-#include "KEYBRD.H"
-#include "STATES.H"
-#include "CELL.H"
+#include "renderer.h"
+#include "keybrd.h"
+#include "states.h"
+#include "cell.h"
 
 static int isRunning;
 static CellArray aliveCells;

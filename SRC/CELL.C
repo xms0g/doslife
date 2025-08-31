@@ -1,4 +1,4 @@
-#include "CELL.H"
+#include "cell.h"
 #include <stdlib.h>
 
 void caInit(CellArray* ca, int size) {

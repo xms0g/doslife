@@ -1,5 +1,5 @@
-#include "RENDERER.H"
-#include "VGA.H"
+#include "renderer.h"
+#include "vga.h"
 
 void rndInit(void) {
     vgaInit();
