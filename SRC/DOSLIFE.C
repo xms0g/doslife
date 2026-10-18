@@ -4,7 +4,7 @@
 #include "cell.h"
 
 static int is_running;
-static cell_array alivecells;
+static cell_array alive_cells;
 static cell_array neighboring_dead_cells;
 static cell_array newly_dead_cells;
 
@@ -23,8 +23,8 @@ static void update(void) {
     int i,j;
     cell* cell;
         
-    for (i = 0; i < alivecells.count; ++i) {
-        cell = ca_at(&alivecells, i);
+    for (i = 0; i < alive_cells.count; ++i) {
+        cell = ca_at(&alive_cells, i);
         
         process_neighbors(cell);
             
@@ -40,18 +40,18 @@ static void update(void) {
         
         if (cell->alive_neighbors_count == 3) {
             cell->alive_neighbors_count = 0;
-            ca_pushback(&alivecells, cell);
+            ca_pushback(&alive_cells, cell);
         }
     }
 
     for (i = 0; i < newly_dead_cells.count; ++i) {
         cell* dead_cell = ca_at(&newly_dead_cells, i);
 
-        for (j = 0; j < alivecells.count; ++j) {
-            cell* alive_cell = ca_at(&alivecells, j);
+        for (j = 0; j < alive_cells.count; ++j) {
+            cell* alive_cell = ca_at(&alive_cells, j);
             
             if (CELL_IS_SAME(dead_cell, alive_cell)) {
-                ca_remove(&alivecells, j);
+                ca_remove(&alive_cells, j);
             }
         }
     }
@@ -66,8 +66,8 @@ static void render(void) {
 
     rnd_clear(0x0);
 
-    for (i = 0; i < alivecells.count; ++i) {
-        cell = ca_at(&alivecells, i);
+    for (i = 0; i < alive_cells.count; ++i) {
+        cell = ca_at(&alive_cells, i);
         
         rnd_draw_rectangle(
             cell->x,
@@ -104,8 +104,8 @@ static void process_neighbors(cell* cell) {
     int i;
     cell* cell;
     
-    for (i = 0; i < alivecells.count; i++) {
-        cell = ca_at(&alivecells, i);
+    for (i = 0; i < alive_cells.count; i++) {
+        cell = ca_at(&alive_cells, i);
         
         if (CELL_IS_SAME(cell, neighbor)) {
             current_alive->alive_neighbors_count++;
@@ -128,7 +128,7 @@ static void process_neighbors(cell* cell) {
 
 static void initializecells(void) {
     int i;
-    ca_init(&alivecells, INITIAL_CELL_COUNT);
+    ca_init(&alive_cells, INITIAL_CELL_COUNT);
     ca_init(&neighboring_dead_cells, 1);
     ca_init(&newly_dead_cells, 1);
     
@@ -141,7 +141,7 @@ static void initializecells(void) {
         cell.color = CELL_COLOR;
         cell.alive_neighbors_count = 0;
 
-        ca_pushback(&alivecells, &cell);
+        ca_pushback(&alive_cells, &cell);
     }
 }
  
@@ -159,7 +159,7 @@ void main(void) {
         render();
     }
 
-    caF_free(&alivecells);
+    caF_free(&alive_cells);
     caF_free(&neighboring_dead_cells);
     caF_free(&newly_dead_cells);
 
