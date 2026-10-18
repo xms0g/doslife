@@ -1,5 +1,5 @@
-#ifndef cell_H
-#define cell_H
+#ifndef CELL_H
+#define CELL_H
 
 #define CELL_WIDTH  8
 #define CELL_HEIGHT 8
