@@ -21,26 +21,25 @@ static void process_input(void) {
 
 static void update(void) {
     int i,j;
-    cell* cell;
         
     for (i = 0; i < alive_cells.count; ++i) {
-        cell = ca_at(&alive_cells, i);
+        cell* c = ca_at(&alive_cells, i);
         
-        process_neighbors(cell);
+        process_neighbors(c);
             
-        if (cell->alive_neighbors_count < 2 || cell->alive_neighbors_count > 3) {
-           ca_pushback(&newly_dead_cells, cell);
+        if (c->alive_neighbors_count < 2 || c->alive_neighbors_count > 3) {
+           ca_pushback(&newly_dead_cells, c);
         }
             
-        cell->alive_neighbors_count = 0;
+        c->alive_neighbors_count = 0;
     } 
         
     for (i = 0; i < neighboring_dead_cells.count; ++i) {
-        cell = ca_at(&neighboring_dead_cells, i);
+        cell* c = ca_at(&neighboring_dead_cells, i);
         
-        if (cell->alive_neighbors_count == 3) {
-            cell->alive_neighbors_count = 0;
-            ca_pushback(&alive_cells, cell);
+        if (c->alive_neighbors_count == 3) {
+            c->alive_neighbors_count = 0;
+            ca_pushback(&alive_cells, c);
         }
     }
 
@@ -81,13 +80,13 @@ static void render(void) {
     rnd_update_buffer();
 }
 
-static void process_neighbors(cell* cell) {
+static void process_neighbors(cell* c) {
     int i;
 
     for (i = 0; i < NEIGHBOR_COUNT; ++i) {
         cell neighbor;
-        neighbor.x = cell->x + neighbor_states[i][0];
-        neighbor.y = cell->y + neighbor_states[i][1];
+        neighbor.x = c->x + neighbor_states[i][0];
+        neighbor.y = c->y + neighbor_states[i][1];
         neighbor.width = CELL_WIDTH;
         neighbor.height = CELL_HEIGHT;
         neighbor.color = CELL_COLOR;
@@ -96,28 +95,27 @@ static void process_neighbors(cell* cell) {
         if (neighbor.x < 0 || neighbor.y < 0 || neighbor.x >= 312 || neighbor.y >= 192)
             continue;
         
-        check_neighbor(cell, &neighbor);
+        check_neighbor(c, &neighbor);
     }
 }
 
  static void check_neighbor(cell* current_alive, cell* neighbor) {
     int i;
-    cell* cell;
     
     for (i = 0; i < alive_cells.count; i++) {
-        cell = ca_at(&alive_cells, i);
+        cell* c = ca_at(&alive_cells, i);
         
-        if (CELL_IS_SAME(cell, neighbor)) {
+        if (CELL_IS_SAME(c, neighbor)) {
             current_alive->alive_neighbors_count++;
             return;
         }
     }
 
     for (i = 0; i < neighboring_dead_cells.count; i++) {
-        cell = ca_at(&neighboring_dead_cells, i);
+        cell* c = ca_at(&neighboring_dead_cells, i);
         
-        if (CELL_IS_SAME(cell, neighbor)) {
-            cell->alive_neighbors_count++;
+        if (CELL_IS_SAME(c, neighbor)) {
+            c->alive_neighbors_count++;
             return;
         }
     }
@@ -133,15 +131,15 @@ static void initializecells(void) {
     ca_init(&newly_dead_cells, 1);
     
     for (i = 0; i < INITIAL_CELL_COUNT; i++) {
-        cell cell;
-        cell.x = initial_states[i][0];
-        cell.y = initial_states[i][1];
-        cell.width = CELL_WIDTH;
-        cell.height = CELL_HEIGHT;
-        cell.color = CELL_COLOR;
-        cell.alive_neighbors_count = 0;
+        cell c;
+        c.x = initial_states[i][0];
+        c.y = initial_states[i][1];
+        c.width = CELL_WIDTH;
+        c.height = CELL_HEIGHT;
+        c.color = CELL_COLOR;
+        c.alive_neighbors_count = 0;
 
-        ca_pushback(&alive_cells, &cell);
+        ca_pushback(&alive_cells, &c);
     }
 }
  

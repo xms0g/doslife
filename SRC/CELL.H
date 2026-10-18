@@ -8,9 +8,10 @@
 #define CELL_IS_SAME(c1, c2) ((c1)->x == (c2)->x && (c1)->y == (c2)->y)
 
 typedef struct {
-    int x, y;
+    int x;
+    int y;
     char color;
-    int width
+    int width;
     int height;
     int alive_neighbors_count;
 } cell;
@@ -22,7 +23,7 @@ typedef struct {
 } cell_array;   
 
 void ca_init(cell_array* ca, int size);
-void ca_pushback(cell_array* ca, cell* cell);
+void ca_pushback(cell_array* ca, cell* c);
 void ca_remove(cell_array* ca, int index);
 cell* ca_at(cell_array* ca, int index);
 void ca_clear(cell_array* ca);

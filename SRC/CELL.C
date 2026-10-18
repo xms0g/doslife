@@ -7,13 +7,13 @@ void ca_init(cell_array* ca, int size) {
     ca->data = (cell*)malloc(size * sizeof(cell));
 }
 
-void ca_pushback(cell_array* ca, cell* cell) {
+void ca_pushback(cell_array* ca, cell* c) {
     if (ca->count == ca->capacity) {
         ca->capacity *= 2;
         ca->data = (cell*)realloc(ca->data, ca->capacity * sizeof(cell));
     }
 
-    ca->data[ca->count++] = *cell;
+    ca->data[ca->count++] = *c;
 }
 
 void ca_remove(cell_array* ca, int index) {
