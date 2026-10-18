@@ -1,5 +1,5 @@
-#ifndef CELL_H
-#define CELL_H
+#ifndef cell_H
+#define cell_H
 
 #define CELL_WIDTH  8
 #define CELL_HEIGHT 8
@@ -10,21 +10,22 @@
 typedef struct {
     int x, y;
     char color;
-    int width, height;
-    int aliveNeighborsCount;
-} Cell;
+    int width
+    int height;
+    int alive_neighbors_count;
+} cell;
 
 typedef struct {    
     int count;      
     int capacity;   
-    Cell* data;     
-} CellArray;   
+    cell* data;     
+} cell_array;   
 
-void caInit(CellArray* ca, int size);
-void caPushback(CellArray* ca, Cell* cell);
-void caRemove(CellArray* ca, int index);
-Cell* caAt(CellArray* ca, int index);
-void caClear(CellArray* ca);
-void caFree(CellArray* ca);
+void ca_init(cell_array* ca, int size);
+void ca_pushback(cell_array* ca, cell* cell);
+void ca_remove(cell_array* ca, int index);
+cell* ca_at(cell_array* ca, int index);
+void ca_clear(cell_array* ca);
+void caF_free(cell_array* ca);
 
 #endif

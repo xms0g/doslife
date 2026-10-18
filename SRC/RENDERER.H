@@ -1,14 +1,14 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-void rndInit(void);
+void rnd_init(void);
 
-void rndExit(void);
+void rnd_exit(void);
 
-void rndDrawRectangle(int x, int y, int width, int height, char color);
+void rnd_draw_rectangle(int x, int y, int width, int height, char color);
 
-void rndClear(char color);
+void rnd_clear(char color);
 
-void rndUpdateBuffer(void);
+void rnd_update_buffer(void);
 
 #endif

@@ -4,7 +4,7 @@
 #define INITIAL_CELL_COUNT  21
 #define NEIGHBOR_COUNT      8
 
-static const int initialStates[INITIAL_CELL_COUNT][2] = {
+static const int initial_states[INITIAL_CELL_COUNT][2] = {
     {9, 182},
     {18, 182},
     {27, 182},
@@ -28,7 +28,7 @@ static const int initialStates[INITIAL_CELL_COUNT][2] = {
     {275, 50},
 };
 
- static const int neighborStates[NEIGHBOR_COUNT][2] = {
+ static const int neighbor_states[NEIGHBOR_COUNT][2] = {
     {9, 0},
     {-9, 0},
     {-9, -9},

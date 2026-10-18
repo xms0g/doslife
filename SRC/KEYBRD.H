@@ -5,11 +5,11 @@
 #define L_ARROW     0x4B
 #define ESC         0x01
 
-void kbInit(void);
+void kb_init(void);
 
-void kbExit(void);
+void kb_exit(void);
 
-unsigned char kbHit(void);
+unsigned char kb_hit(void);
 
 #endif
 

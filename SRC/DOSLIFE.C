@@ -3,73 +3,73 @@
 #include "states.h"
 #include "cell.h"
 
-static int isRunning;
-static CellArray aliveCells;
-static CellArray neighboringDeadCells;
-static CellArray newlyDeadCells;
+static int is_running;
+static cell_array alivecells;
+static cell_array neighboring_dead_cells;
+static cell_array newly_dead_cells;
 
-static void processNeighbors(Cell* cell);
-static void checkNeighbor(Cell* currentAlive, Cell* neighbor);
+static void process_neighbors(cell* cell);
+static void check_neighbor(cell* current_alive, cell* neighbor);
 
-static void processInput(void) {
-    char key = kbHit();
+static void process_input(void) {
+    char key = kb_hit();
 
     if (key == ESC) {
-        isRunning = 0;
+        is_running = 0;
     }
 }
 
 static void update(void) {
     int i,j;
-    Cell* cell;
+    cell* cell;
         
-    for (i = 0; i < aliveCells.count; i++) {
-        cell = caAt(&aliveCells, i);
+    for (i = 0; i < alivecells.count; ++i) {
+        cell = ca_at(&alivecells, i);
         
-        processNeighbors(cell);
+        process_neighbors(cell);
             
-        if (cell->aliveNeighborsCount < 2 || cell->aliveNeighborsCount > 3) {
-           caPushback(&newlyDeadCells, cell);
+        if (cell->alive_neighbors_count < 2 || cell->alive_neighbors_count > 3) {
+           ca_pushback(&newly_dead_cells, cell);
         }
             
-        cell->aliveNeighborsCount = 0;
+        cell->alive_neighbors_count = 0;
     } 
         
-    for (i = 0; i < neighboringDeadCells.count; i++) {
-        cell = caAt(&neighboringDeadCells, i);
+    for (i = 0; i < neighboring_dead_cells.count; ++i) {
+        cell = ca_at(&neighboring_dead_cells, i);
         
-        if (cell->aliveNeighborsCount == 3) {
-            cell->aliveNeighborsCount = 0;
-            caPushback(&aliveCells, cell);
+        if (cell->alive_neighbors_count == 3) {
+            cell->alive_neighbors_count = 0;
+            ca_pushback(&alivecells, cell);
         }
     }
 
-    for (i = 0; i < newlyDeadCells.count; i++) {
-        Cell* deadCell = caAt(&newlyDeadCells, i);
+    for (i = 0; i < newly_dead_cells.count; ++i) {
+        cell* dead_cell = ca_at(&newly_dead_cells, i);
 
-        for (j = 0; j < aliveCells.count; j++) {
-            Cell* aliveCell = caAt(&aliveCells, j);
+        for (j = 0; j < alivecells.count; ++j) {
+            cell* alive_cell = ca_at(&alivecells, j);
             
-            if (CELL_IS_SAME(deadCell, aliveCell)) {
-                caRemove(&aliveCells, j);
+            if (CELL_IS_SAME(dead_cell, alive_cell)) {
+                ca_remove(&alivecells, j);
             }
         }
     }
 
-    caClear(&neighboringDeadCells);
-    caClear(&newlyDeadCells);
+    ca_clear(&neighboring_dead_cells);
+    ca_clear(&newly_dead_cells);
 }
 
 static void render(void) {
     int i;
-    Cell* cell;
+    cell* cell;
 
-    rndClear(0x0);
+    rnd_clear(0x0);
 
-    for (i = 0; i < aliveCells.count; i++) {
-        cell = caAt(&aliveCells, i);
+    for (i = 0; i < alivecells.count; ++i) {
+        cell = ca_at(&alivecells, i);
         
-        rndDrawRectangle(
+        rnd_draw_rectangle(
             cell->x,
             cell->y,
             cell->width,
@@ -78,93 +78,93 @@ static void render(void) {
         );
     }
 
-    rndUpdateBuffer();
+    rnd_update_buffer();
 }
 
-static void processNeighbors(Cell* cell) {
+static void process_neighbors(cell* cell) {
     int i;
 
-    for (i = 0; i < NEIGHBOR_COUNT; i++) {
-        Cell neighbor;
-        neighbor.x = cell->x + neighborStates[i][0];
-        neighbor.y = cell->y + neighborStates[i][1];
+    for (i = 0; i < NEIGHBOR_COUNT; ++i) {
+        cell neighbor;
+        neighbor.x = cell->x + neighbor_states[i][0];
+        neighbor.y = cell->y + neighbor_states[i][1];
         neighbor.width = CELL_WIDTH;
         neighbor.height = CELL_HEIGHT;
         neighbor.color = CELL_COLOR;
-        neighbor.aliveNeighborsCount = 0;
+        neighbor.alive_neighbors_count = 0;
         // Check grid borders
         if (neighbor.x < 0 || neighbor.y < 0 || neighbor.x >= 312 || neighbor.y >= 192)
             continue;
         
-        checkNeighbor(cell, &neighbor);
+        check_neighbor(cell, &neighbor);
     }
 }
 
- static void checkNeighbor(Cell* currentAlive, Cell* neighbor) {
+ static void check_neighbor(cell* current_alive, cell* neighbor) {
     int i;
-    Cell* cell;
+    cell* cell;
     
-    for (i = 0; i < aliveCells.count; i++) {
-        cell = caAt(&aliveCells, i);
+    for (i = 0; i < alivecells.count; i++) {
+        cell = ca_at(&alivecells, i);
         
         if (CELL_IS_SAME(cell, neighbor)) {
-            currentAlive->aliveNeighborsCount++;
+            current_alive->alive_neighbors_count++;
             return;
         }
     }
 
-    for (i = 0; i < neighboringDeadCells.count; i++) {
-        cell = caAt(&neighboringDeadCells, i);
+    for (i = 0; i < neighboring_dead_cells.count; i++) {
+        cell = ca_at(&neighboring_dead_cells, i);
         
         if (CELL_IS_SAME(cell, neighbor)) {
-            cell->aliveNeighborsCount++;
+            cell->alive_neighbors_count++;
             return;
         }
     }
 
-    neighbor->aliveNeighborsCount++;
-    caPushback(&neighboringDeadCells, neighbor);
+    neighbor->alive_neighbors_count++;
+    ca_pushback(&neighboring_dead_cells, neighbor);
 }
 
-static void initializeCells(void) {
+static void initializecells(void) {
     int i;
-    caInit(&aliveCells, INITIAL_CELL_COUNT);
-    caInit(&neighboringDeadCells, 1);
-    caInit(&newlyDeadCells, 1);
+    ca_init(&alivecells, INITIAL_CELL_COUNT);
+    ca_init(&neighboring_dead_cells, 1);
+    ca_init(&newly_dead_cells, 1);
     
     for (i = 0; i < INITIAL_CELL_COUNT; i++) {
-        Cell cell;
-        cell.x = initialStates[i][0];
-        cell.y = initialStates[i][1];
+        cell cell;
+        cell.x = initial_states[i][0];
+        cell.y = initial_states[i][1];
         cell.width = CELL_WIDTH;
         cell.height = CELL_HEIGHT;
         cell.color = CELL_COLOR;
-        cell.aliveNeighborsCount = 0;
+        cell.alive_neighbors_count = 0;
 
-        caPushback(&aliveCells, &cell);
+        ca_pushback(&alivecells, &cell);
     }
 }
  
 void main(void) {
-    isRunning = 1;
+    is_running = 1;
 
-    rndInit();
-    kbInit();
+    rnd_init();
+    kb_init();
 
-    initializeCells();
+    initializecells();
     
-    while (isRunning) {
-        processInput();
+    while (is_running) {
+        process_input();
         update();
         render();
     }
 
-    caFree(&aliveCells);
-    caFree(&neighboringDeadCells);
-    caFree(&newlyDeadCells);
+    caF_free(&alivecells);
+    caF_free(&neighboring_dead_cells);
+    caF_free(&newly_dead_cells);
 
-    rndExit();
-    kbExit();
+    rnd_exit();
+    kb_exit();
 }
 
 
